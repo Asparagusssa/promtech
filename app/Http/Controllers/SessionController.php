@@ -27,10 +27,7 @@ class SessionController extends Controller
             $response = $this->sessionService->login($request);
             return response()->json($response, 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], $e instanceof ValidationException ? 422 : 500);
+            return $this->errorResponse($e);
         }
     }
 

@@ -4,34 +4,59 @@ namespace App\Service;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use function Laravel\Prompts\error;
+use function PHPUnit\Framework\isNull;
 
 class CategoryService
 {
-    public function getAll(Request $request)
+    public function getAll()
     {
-        return Category::with('products')->orderByRaw('"order" IS NULL, "order" ASC')->orderBy('id')->get();
+        return Category::with([
+            'products' => function ($query) {
+                $query->orderBy('title');
+            }
+        ])->orderByRaw('"order" IS NULL, "order" ASC')->orderBy('title')->get();
     }
 
-    public function getOne($product_id)
+    public function getOne($id)
     {
-        return Product::with('category')->find($product_id);
+        return Category::with('products')->find($id);
     }
 
-    public function create(array $data)
+    public function create(Request $request)
     {
-        return Product::create($data);
+        $data = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('categories', 'public');
+        }
+
+        return Category::create($data);
     }
 
-    public function update(array $data, $product_id)
+    public function update(Request $request, $id)
     {
-        $product = Product::find($product_id);
-        $product->update($data);
-        return $product->load('category');
+        $data = $request->validated();
+
+        $category = Category::find($id);
+        if ($request->hasFile('image')) {
+            if (isset($category->image)) {
+                Storage::disk('public')->delete('categories/' . basename($category->image));
+            }
+            $data['image'] = $request->file('image')->store('categories', 'public');
+        }
+
+        $category->update($data);
+        return $category->load('products');
     }
 
-    public function delete($product_id): void
+    public function delete($id): void
     {
-        $product = Product::find($product_id);
-        $product->delete();
+        $category = Category::find($id);
+        if (isset($category->image)) {
+            Storage::disk('public')->delete('categories/' . basename($category->image));
+        }
+        $category->delete();
     }
 }

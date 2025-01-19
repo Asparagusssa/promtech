@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Product;
 
+use App\Http\Resources\Category\CategoryResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,8 +20,8 @@ class ProductResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'price' => $this->price,
-            'related_title' => $this->related_title,
-            'category' => $this->whenLoaded('category'),
+            'category' => new CategoryResource($this->whenLoaded('category')),
+            'images' => new ProductImageCollection($this->whenLoaded('productImages')),
         ];
     }
 }

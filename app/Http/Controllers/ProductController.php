@@ -27,11 +27,7 @@ class ProductController extends Controller
             $products = $this->productService->getAll($request);
             return new ProductCollection($products);
         } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error fetching products.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->errorResponse($e);
         }
     }
 
@@ -40,16 +36,11 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $data = $request->validated();
         try {
-            $product = $this->productService->create($data);
-            return new ProductResource($product);
+            $product = $this->productService->create($request);
+            return $this->successResponse(new ProductResource($product));
         } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error creating products.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->errorResponse($e);
         }
     }
 
@@ -59,8 +50,7 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $product = $this->productService->getOne($product->id);
-        return new ProductResource($product);
-
+        return $this->successResponse(new ProductResource($product));
     }
 
     /**
@@ -68,16 +58,11 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
-        $data = $request->validated();
         try {
-            $product = $this->productService->update($data, $product->id);
-            return new ProductResource($product);
+            $product = $this->productService->update($request, $product->id);
+            return $this->successResponse(new ProductResource($product));
         } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error creating products.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->errorResponse($e);
         }
     }
 
@@ -88,13 +73,9 @@ class ProductController extends Controller
     {
         try {
             $this->productService->delete($product->id);
-            return response()->json(null, 204);
+            return $this->successResponse(null, 204);
         } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error creating products.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->errorResponse($e);
         }
     }
 }

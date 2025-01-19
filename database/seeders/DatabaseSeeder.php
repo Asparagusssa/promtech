@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -16,10 +17,11 @@ class DatabaseSeeder extends Seeder
     {
         User::factory()->create([
             'name' => 'Admin',
-            'email' => env('ADMIN_MAIL'),
-            'password' => bcrypt(env('ADMIN_PASSWORD')),
+            'email' => config('app.email'),
+            'password' => bcrypt(config('app.password')),
         ]);
 
         Product::factory(10)->create();
+        ProductImage::factory(1)->create();
     }
 }
