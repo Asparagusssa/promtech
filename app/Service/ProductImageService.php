@@ -31,7 +31,6 @@ class ProductImageService
 
         if($request->hasFile('image')){
             $data['image'] = $request->file('image')->store('ProductImages', 'public');
-
         }
 
         return $product->productImages()->create($data);
