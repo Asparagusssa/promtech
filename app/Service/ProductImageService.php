@@ -14,13 +14,15 @@ class ProductImageService
     public function getAllById(int $id)
     {
         $product = Product::find($id);
+        if (!$product) {
+            throw new \Exception("Товар с id: $id не найден.", 404);
+        }
         return new ProductImageResource($product->productImages);
     }
 
     public function getOne($product_id, $image_id)
     {
         $image = $this->getImageByProductId($product_id, $image_id);
-
         return $image;
     }
 

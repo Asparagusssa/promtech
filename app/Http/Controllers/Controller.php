@@ -25,12 +25,13 @@ abstract class Controller
      * @param  \Exception  $exception
      * @return JsonResponse
      */
-    protected function errorResponse(\Throwable $exception, $code = null): JsonResponse
+    protected function errorResponse(\Throwable $exception): JsonResponse
     {
+        $statusCode = $exception->getCode() > 0 ? $exception->getCode() : 500;
 
         return response()->json([
             'success' => false,
             'message' => $exception->getMessage(),
-        ], $exception->getCode());
+        ], $statusCode);
     }
 }
