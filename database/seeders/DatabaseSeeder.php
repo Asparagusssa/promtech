@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Document;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\User;
@@ -23,5 +24,6 @@ class DatabaseSeeder extends Seeder
 
         Product::factory(10)->create();
         ProductImage::factory(1)->create();
+        Document::factory(10)->create();
     }
 }
