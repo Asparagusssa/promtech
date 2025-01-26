@@ -21,7 +21,6 @@ class ProductFactory extends Factory
             'category_id' => Category::factory(),
             'title' => fake()->text(15),
             'description' => fake()->text(40),
-            'price' => fake()->randomElement([true, false]) ? fake()->numberBetween(1000, 100000) : 0,
         ];
     }
 }

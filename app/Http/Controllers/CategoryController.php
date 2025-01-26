@@ -6,7 +6,11 @@ use App\Action\Category\DeleteImageAction;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\Category\CategoryCollection;
 use App\Http\Resources\Category\CategoryResource;
+use App\Http\Resources\Product\ProductCollection;
+use App\Http\Resources\Product\PropertyCollection;
 use App\Models\Category;
+use App\Models\Product;
+use App\Models\Property;
 use App\Service\CategoryService;
 use Illuminate\Http\Request;
 
@@ -92,5 +96,11 @@ class CategoryController extends Controller
         } catch (\Throwable $e) {
             return $this->errorResponse($e);
         }
+    }
+
+    public function getProperties($category_id)
+    {
+        $category = Category::find($category_id);
+        return Property::where('category_id', $category->id)->orderBy('value')->get();
     }
 }

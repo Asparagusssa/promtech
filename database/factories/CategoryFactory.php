@@ -21,7 +21,7 @@ class CategoryFactory extends Factory
             'title' => fake()->text(10),
             'image' => 'test/test.jpg',
             'related_title' => fake()->text(10),
-            'order' => null,
+            'order' => fake()->numberBetween(0,1) ? fake()->numberBetween(1, 10) : null,
         ];
     }
 }

@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Action\Product\GetAvailablePropertiesAction;
+use App\Action\Product\GetAvailableRelatesAction;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\Product\ProductCollection;
 use App\Http\Resources\Product\ProductResource;
+use App\Http\Resources\Product\PropertyCollection;
+use App\Http\Resources\Relate\RelateCollection;
 use App\Models\Product;
+use App\Models\Property;
 use App\Service\ProductService;
 use Illuminate\Http\Request;
 
@@ -77,5 +82,17 @@ class ProductController extends Controller
         } catch (\Throwable $e) {
             return $this->errorResponse($e);
         }
+    }
+
+    public function availableRelates(Product $product, GetAvailableRelatesAction $action)
+    {
+        $relates = $action($product->id);
+        return new RelateCollection($relates);
+    }
+
+    public function availableProperties(Product $product, GetAvailablePropertiesAction $action)
+    {
+        $properties = $action($product->id);
+        return new PropertyCollection($properties);
     }
 }

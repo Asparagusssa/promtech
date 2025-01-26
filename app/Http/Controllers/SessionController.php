@@ -18,17 +18,8 @@ class SessionController extends Controller
 
     public function login(Request $request)
     {
-        $data = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
-
-        try {
-            $response = $this->sessionService->login($request);
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            return $this->errorResponse($e);
-        }
+        $response = $this->sessionService->login($request);
+        return response()->json($response, 200);
     }
 
     public function logout(Request $request)

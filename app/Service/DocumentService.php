@@ -10,7 +10,7 @@ class DocumentService
 {
     public function getAll()
     {
-        return Document::orderBy('title')->get();
+        return Document::orderByRaw('"order" IS NULL, "order" ASC')->orderBy('id')->get();
     }
 
     public function getOne($document_id)

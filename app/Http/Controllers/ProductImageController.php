@@ -12,7 +12,8 @@ use App\Service\ProductImageService;
 class ProductImageController extends Controller
 {
     public function __construct(protected ProductImageService $imageService)
-    {}
+    {
+    }
 
     public function index($product_id)
     {
@@ -26,12 +27,9 @@ class ProductImageController extends Controller
 
     public function store($product_id, ProductImageRequest $request)
     {
-        try {
-            $images = $this->imageService->create($product_id, $request);
-            return $this->successResponse(new ProductImageResource($images));
-        } catch (\Throwable $e) {
-            return $this->errorResponse($e);
-        }
+        $images = $this->imageService->create($product_id, $request);
+        return $this->successResponse(new ProductImageResource($images));
+
     }
 
     public function show($product_id, $image_id)

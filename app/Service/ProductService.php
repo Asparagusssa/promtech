@@ -10,12 +10,16 @@ class ProductService
     public function getAll(Request $request)
     {
         $perPage = $request->get('per_page', 5);
-        return Product::with([
-            'category' => function ($query) {},
+        return Product::filter()->with([
+            'category',
             'productImages' => function ($query) {
                 $query->orderByRaw('"order" IS NULL, "order" ASC')->orderBy('id');
             },
-        ])->orderBy('title')->paginate($perPage);
+            'properties',
+            'relates' => function ($query) {
+                $query->orderBy('title');
+            }
+        ])->paginate($perPage);
     }
 
     public function getOne($id)
@@ -24,6 +28,10 @@ class ProductService
             'category' => function ($query) {},
             'productImages' => function ($query) {
                 $query->orderByRaw('"order" IS NULL, "order" ASC')->orderBy('id');
+            },
+            'properties',
+            'relates' => function ($query) {
+                $query->orderBy('title');
             },
         ])->find($id);
     }

@@ -11,9 +11,14 @@ class SessionService
 {
     public function login(Request $request): array
     {
+        $data = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
         if (!Auth::attempt($request->only('email', 'password'))) {
             throw ValidationException::withMessages([
-                'email' => "Неверный логин или пароль"
+                'password' => "Неверный логин или пароль"
             ]);
         }
 
@@ -29,6 +34,6 @@ class SessionService
 
     public function logout(Request $request): void
     {
-        $request->user()->tokens()->delete();
+        $request->user()->currentAccessToken()->delete();
     }
 }
