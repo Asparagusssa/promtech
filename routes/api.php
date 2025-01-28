@@ -6,6 +6,8 @@ use App\Http\Controllers\BannerUrlController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\EmailController;
+use App\Http\Controllers\EmailTypeController;
 use App\Http\Controllers\PageSectionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
@@ -37,12 +39,22 @@ Route::get('/products/{product}/properties', [ProductPropertyController::class, 
 Route::apiResource('/relates', RelateController::class)->only(['index', 'show']);
 Route::get('/products/{product}/relates', [ProductRelateController::class, 'index']);
 Route::get('/pages/seos', [SeoController::class, 'getAll']);
-Route::apiResource('/pages/{page}/seos', SeoController::class)->only(['index', 'show']);
+
+Route::prefix('/pages')->group(function () {
+    Route::get('/', [PageSectionController::class, 'getAllPages']);
+    Route::apiResource('/{page}/sections', PageSectionController::class)->only(['index', 'show']);
+    Route::apiResource('/sections/types', SectionTypeController::class)->only(['index', 'show']);
+    Route::apiResource('/{page}/seos', SeoController::class)->only(['index', 'show']);
+});
+
 Route::apiResource('/banners', BannerController::class)->only(['index', 'show']);
 Route::apiResource('/banners/{banner}/images', BannerImageController::class)->only(['index', 'show']);
 Route::apiResource('/banners/{banner}/urls', BannerUrlController::class)->only(['index', 'show']);
 Route::get('/contacts', [ContactController::class, 'index']);
 Route::apiResource('/trusts', TrustController::class)->only(['index', 'show']);
+
+Route::apiResource('emails', EmailController::class)->only(['index', 'show']);
+Route::apiResource('email-types', EmailTypeController::class)->only(['index', 'show']);
 
 Route::get('/documents/download/{path}', [DocumentController::class, 'download'])->where('path', '.*');
 
@@ -64,9 +76,9 @@ Route::group(['middleware' => "auth:sanctum"], function () {
     Route::apiResource('/relates', RelateController::class)->only(['store', 'update', 'destroy']);
     Route::prefix('/pages')->group(function () {
         Route::get('/', [PageSectionController::class, 'getAllPages']);
-        Route::apiResource('/{page}/sections', PageSectionController::class);
+        Route::apiResource('/{page}/sections', PageSectionController::class)->only(['store', 'update', 'destroy']);
         Route::delete('/sections/{section}/image', [PageSectionController::class, 'deleteImage']);
-        Route::apiResource('/sections/types', SectionTypeController::class);
+        Route::apiResource('/sections/types', SectionTypeController::class)->only(['store', 'update', 'destroy']);
         Route::apiResource('/{page}/seos', SeoController::class)->only(['store', 'update', 'destroy']);
     });
     Route::apiResource('/banners', BannerController::class)->only(['store', 'update', 'destroy']);
@@ -76,4 +88,6 @@ Route::group(['middleware' => "auth:sanctum"], function () {
     Route::match(['put', 'patch'], '/contacts', [ContactController::class, 'update']);
 
     Route::apiResource('/trusts', TrustController::class)->only(['store', 'update', 'destroy']);
+    Route::apiResource('/emails', EmailController::class)->only(['store', 'update', 'destroy']);
+    Route::apiResource('/emails/types', EmailTypeController::class)->only(['store', 'update', 'destroy']);
 });
