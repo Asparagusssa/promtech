@@ -10,7 +10,7 @@ class PageSectionRequest extends FormRequest
     {
         return [
             'title' => ['required', 'max:255'],
-            'content' => ['required', 'max:255'],
+            'content' => ['required'],
             'image' => ['nullable', 'image', 'max:6240'],
             'section_type_id' => ['required', 'exists:section_types,id'],
             'order' => ['nullable', 'integer', 'min:1'],
