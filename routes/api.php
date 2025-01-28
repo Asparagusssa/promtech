@@ -75,7 +75,6 @@ Route::group(['middleware' => "auth:sanctum"], function () {
     Route::apiResource('/properties', PropertyController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('/relates', RelateController::class)->only(['store', 'update', 'destroy']);
     Route::prefix('/pages')->group(function () {
-        Route::get('/', [PageSectionController::class, 'getAllPages']);
         Route::apiResource('/{page}/sections', PageSectionController::class)->only(['store', 'update', 'destroy']);
         Route::delete('/sections/{section}/image', [PageSectionController::class, 'deleteImage']);
         Route::apiResource('/sections/types', SectionTypeController::class)->only(['store', 'update', 'destroy']);
