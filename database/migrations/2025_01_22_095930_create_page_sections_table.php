@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Page::class)->index()->constrained()->cascadeOnDelete();
             $table->string('title');
-            $table->string('content');
+            $table->text('content');
             $table->string('image')->nullable();
             $table->foreignIdFor(SectionType::class)->index()->constrained()->cascadeOnDelete();
             $table->integer('order')->nullable();
