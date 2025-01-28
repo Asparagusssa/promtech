@@ -50,6 +50,13 @@ class PageSectionController extends Controller
 
     public function getAllPages()
     {
-        return new PageCollection(Page::with('sections', 'seos')->orderBy('id')->get());
+        return new PageCollection(Page::with([
+            'sections' => function ($query) {
+                $query->orderByRaw('"order" IS NULL, "order" ASC')->orderBy('title');
+            },
+            'seos' => function ($query) {
+                $query->orderBy('id');
+            }
+        ])->orderBy('id')->get());
     }
 }
