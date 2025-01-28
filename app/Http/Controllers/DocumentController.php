@@ -7,10 +7,13 @@ use App\Http\Resources\Document\DocumentCollection;
 use App\Http\Resources\Document\DocumentResource;
 use App\Models\Document;
 use App\Service\DocumentService;
+use Storage;
 
 class DocumentController extends Controller
 {
-    public function __construct(protected DocumentService $documentService){}
+    public function __construct(
+        protected DocumentService $documentService,
+    ){}
 
     public function index()
     {
@@ -58,5 +61,19 @@ class DocumentController extends Controller
         } catch (\Throwable $e) {
             return $this->errorResponse($e);
         }
+    }
+
+    public function download($path)
+    {
+        $document = Document::where('file', '=', $path)->firstOrFail();
+        if(!isset($document)){
+            throw new \Exception("Документ не найден");
+        }
+        $suffix = pathinfo($document->file, PATHINFO_EXTENSION);
+        $originalFileName = $document->filename;
+        if (!Storage::disk('public')->exists($path)) {
+            return response()->json(['message' => 'Файл не найден'], 404);
+        }
+        return response()->download(storage_path('app/public/' . $path), $originalFileName . '.' . $suffix);
     }
 }

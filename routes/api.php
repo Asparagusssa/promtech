@@ -44,6 +44,8 @@ Route::apiResource('/banners/{banner}/urls', BannerUrlController::class)->only([
 Route::get('/contacts', [ContactController::class, 'index']);
 Route::apiResource('/trusts', TrustController::class)->only(['index', 'show']);
 
+Route::get('/documents/download/{path}', [DocumentController::class, 'download'])->where('path', '.*');
+
 
 Route::group(['middleware' => "auth:sanctum"], function () {
     Route::post('/logout', [SessionController::class, 'logout']);

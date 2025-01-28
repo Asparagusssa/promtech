@@ -12,13 +12,13 @@ class DocumentRequest extends FormRequest
             'title' => ['required', 'max:155'],
             'description' => ['required', 'max:255'],
             'image' => ['required', 'image', 'max:6140'],
-            'file' => ['required', 'file', 'max:10240'],
+            'file' => ['required', 'file'],
             'filename' => ['required_with:file', 'max:255'],
             'order' => ['required', 'integer'],
         ];
 
         if ($this->getMethod() === 'PUT' || $this->getMethod() === 'PATCH') {
-            $rules['file'] = ['nullable', 'file', 'max:10240'];
+            $rules['file'] = ['nullable', 'file'];
             $rules['image'] = ['nullable', 'image', 'max:6140'];
         }
 
