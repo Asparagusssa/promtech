@@ -45,10 +45,10 @@ class DatabaseSeeder extends Seeder
         $relates = Relate::factory(10)->create();
 
         $categories->each(function (Category $category) use ($properties, $relates) {
-            Product::factory(rand(3, 5))
+            Product::factory(rand(10, 100))
                 ->create(['category_id' => $category->id])
                 ->each(function (Product $product) use ($properties, $relates) {
-                    ProductImage::factory(3)->create(['product_id' => $product->id]);
+                    ProductImage::factory(1)->create(['product_id' => $product->id]);
 
                     $product->properties()->attach(
                         $properties->random(rand(3, 5))->pluck('id')->toArray()
