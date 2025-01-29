@@ -8,6 +8,8 @@ use App\Models\BannerUrl;
 use App\Models\Category;
 use App\Models\Contact;
 use App\Models\Document;
+use App\Models\Email;
+use App\Models\EmailType;
 use App\Models\Page;
 use App\Models\PageSection;
 use App\Models\Product;
@@ -106,5 +108,12 @@ class DatabaseSeeder extends Seeder
 
         Contact::factory(1)->create();
         Trust::factory(7)->create();
+
+        Email::create([
+            'email' => 'test@test.com',
+        ]);
+        EmailType::create([
+            'type' => 'test',
+        ]);
     }
 }
